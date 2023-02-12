@@ -15,26 +15,28 @@ app.get("/", function (req, res) {
   //res.send("Server run yat.");
 });
 
-io.on("connection", (userSocket) => {
-  console.log("Server Started . . . . . . . . . . . .");
-  let client = userSocket?.handshake?.query?.client;
-  userSocket.on("join", function (data) {
-    console.log(
-      `${client} connected at ${dayjs().format("YYYY-MM-DD hh:mm:ss")}`
-    );
-  });
+io.on("connection", (socket) => {
+  let client = socket?.handshake?.query?.client;
+  console.log(
+    `${client} connected at ${dayjs().format("YYYY-MM-DD hh:mm:ss")}`
+  );
+  // socket.on("join", function () {
+  //   console.log(
+  //     `${client} connected at ${dayjs().format("YYYY-MM-DD hh:mm:ss")}`
+  //   );
+  // });
 
-  userSocket.on("disconnect", (data) => {
+  socket.on("disconnect", () => {
     console.log(`${client} disconnected!`);
   });
 
-  userSocket.on("dispatch", async (state) => {
+  socket.on("dispatch", async (state) => {
+    io.emit("state", state);
     console.log(
       `${client} dispatch (${state ? "ON" : "OFF"}) at ${dayjs().format(
         "YYYY-MM-DD hh:mm:ss"
       )}`
     );
-    userSocket.emit("state", state);
   });
 });
 

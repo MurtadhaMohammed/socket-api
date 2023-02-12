@@ -32,6 +32,7 @@
       });
 
       socket.on("state", (state) => {
+        console.log("Receved ", state)
         let label = document.getElementById("result");
         label.innerText = `the status is : ${state ? "ON" : "OFF"}`;
       });
